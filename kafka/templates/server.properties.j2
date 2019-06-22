@@ -24,10 +24,18 @@ auto.leader.rebalance.enable=true
 auto.create.topics.enable=false
 default.replication.factor=1
 
+# see https://github.com/linkedin/Burrow/issues/50
+offsets.topic.replication.factor=1
+
 # Hostname the broker will advertise to consumers. If not set, kafka will use the value returned
 # from InetAddress.getLocalHost().  If there are multiple interfaces getLocalHost
 # may not be what you want.
-advertised.host.name={{ KAFKA_ADVERTISED_HOST_NAME }}
+# advertised.host.name={{ KAFKA_ADVERTISED_HOST_NAME }}
+advertised.listeners=EXTERNAL://{{ KAFKA_EXT_HOST_NAME }}:{{ KAFKA_EXT_PORT }},PLAINTEXT://{{ KAFKA_ADVERTISED_HOST_NAME }}:{{ KAFKA_ADVERTISED_PORT }}
+#advertised.listeners=PLAINTEXT://{{ KAFKA_EXT_HOST_NAME }}:{{ KAFKA_EXT_PORT }}
+listener.security.protocol.map=EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
+listeners=EXTERNAL://:{{ KAFKA_EXT_PORT }},PLAINTEXT://:{{ KAFKA_ADVERTISED_PORT }}
+inter.broker.listener.name=PLAINTEXT
 
 # Enable topic deletion
 delete.topic.enable={{ KAFKA_DELETE_TOPIC_ENABLE | default('false') }}
@@ -36,7 +44,7 @@ delete.topic.enable={{ KAFKA_DELETE_TOPIC_ENABLE | default('false') }}
 
 # The port the socket server listens on
 port={{ KAFKA_LISTEN_PORT }}
-advertised.port={{ KAFKA_ADVERTISED_PORT | default(KAFKA_LISTEN_PORT) }}
+# advertised.port={{ KAFKA_ADVERTISED_PORT | default(KAFKA_LISTEN_PORT) }}
 
 # The number of threads handling network requests
 num.network.threads=2

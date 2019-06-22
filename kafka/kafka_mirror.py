@@ -46,6 +46,8 @@ def main():
         })
         r.raise_for_status()
         mirror = r.json()['preferred']
+    else:
+        mirror = MIRROR
 
     print(PATH.format(mirror=mirror, kafka=kafka_version, scala=scala_version))
 
