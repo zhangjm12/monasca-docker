@@ -91,6 +91,9 @@ log.retention.check.interval.ms=60000
 # If log.cleaner.enable=true is set the cleaner will be enabled and individual logs can then be marked for log compaction.
 log.cleaner.enable=false
 
+topic.cleanup.policy=delete
+topic.retention.ms={{ TOPIC_RETENTION_MS | default(14400000) }}
+
 ############################# Zookeeper #############################
 
 # Zk connection string (see zk docs for details).
